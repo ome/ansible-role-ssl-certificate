@@ -1,38 +1,51 @@
-Role Name
-=========
+SSL Certificates
+================
 
-A brief description of the role goes here.
+Manage SSL certificates for web-servers.
 
-Requirements
-------------
+Optionally generate self-signed SSL certificates for internal testing.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Defaults: `defaults/main.yml`
 
-Dependencies
-------------
+Optional variables:
+- `ssl_certificate_path`: Server path to SSL certificate
+- `ssl_certificate_key_path`: Server path to SSL certificate key
+- `ssl_certificate_combined_path`: Server path to SSL combined certificate and key (e.g. for Haproxy), set to empty to disable
+- `ssl_certificate_content`: Text content of the certificate, for instance from vault
+- `ssl_certificate_key_content`: Text content of the certificate key
+- `ssl_certificate_selfsigned_create`: Create a self-signed certificate if necessary, default `True`
+- `ssl_certificate_selfsigned_subject`: Self-signed certificate subject
+- `ssl_certificate_selfsigned_days`: Self-signed certificate validity (days)
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
-Example Playbook
-----------------
+Note this role does not configure or restart any webserver for SSL.
+This should be handled elsewhere.
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+Example Playbooks
+-----------------
+
+Create a self-signed certificate with defaults:
+
+    - hosts: all
       roles:
-         - { role: username.rolename, x: 42 }
+        - role: ssl-certificate
 
-License
--------
+Install certificates stored locally on machine running Ansible:
 
-BSD
+    - hosts: all
+      roles:
+        - role: ssl-certificate
+          ssl_certificate_content: "{{ lookup('file', '/path/to/server.crt') }}"
+          ssl_certificate_key_content: "{{ lookup('file', '/path/to/server.key') }}"
+          ssl_certificate_selfsigned_create: False
+
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+ome-devel@lists.openmicroscopy.org.uk

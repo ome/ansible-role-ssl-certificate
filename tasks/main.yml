@@ -1,2 +1,80 @@
 ---
-# tasks file for ansible-role-ssl-certificate
+# tasks file for roles/ssl-certificate
+
+- name: ssl certificate | check parameters
+  fail:
+    msg: ssl_certificate_content or ssl_certificate_key_content is empty
+  when: >-
+    not ssl_certificate_selfsigned_create and
+    ((ssl_certificate_content | length == 0) or
+    (ssl_certificate_key_content | length == 0))
+
+- name: ssl certificate | install openssl
+  become: yes
+  yum:
+    name: openssl
+    state: present
+
+- name: ssl certificate | create certificates directory
+  become: yes
+  file:
+    path: "{{ item | dirname }}"
+    state: directory
+  with_items:
+    - "{{ ssl_certificate_path }}"
+    - "{{ ssl_certificate_key_path }}"
+
+# Create from content of variable e.g. from vault
+
+- name: ssl certificate | write SSL certificate
+  become: yes
+  copy:
+    content: "{{ ssl_certificate_content }}"
+    dest: "{{ ssl_certificate_path }}"
+    mode: 0444
+  when: not ssl_certificate_selfsigned_create
+
+- name: ssl certificate | write SSL certificate key
+  become: yes
+  copy:
+    content: "{{ ssl_certificate_key_content }}"
+    dest: "{{ ssl_certificate_key_path }}"
+    mode: 0400
+  no_log: True
+  when: not ssl_certificate_selfsigned_create
+
+# Self-signed
+# http://serialized.net/2013/04/simply-generating-self-signed-ssl-certs-with-ansible/
+
+- name: ssl certificate | generate self-signed SSL certificate
+  become: yes
+  command:
+    openssl req -new -nodes -x509 -subj "{{ ssl_certificate_selfsigned_subject }}" -days {{ ssl_certificate_selfsigned_days }} -keyout {{ ssl_certificate_key_path }} -out {{ ssl_certificate_path }} -extensions v3_ca
+  args:
+    # Don't overwrite existing certificate
+    creates: "{{ ssl_certificate_path }}"
+  when: ssl_certificate_selfsigned_create
+
+# Create combined certificate and key
+
+- name: ssl certificate | read certificate
+  become: yes
+  slurp:
+    src: "{{ ssl_certificate_path }}"
+  register: _ssl_certificate_content
+
+- name: ssl certificate | read certificate key
+  become: yes
+  slurp:
+    src: "{{ ssl_certificate_key_path }}"
+  register: _ssl_certificate_key_content
+  no_log: True
+
+- name: ssl certificate | write SSL combined certificate key
+  become: yes
+  copy:
+    content: "{{ _ssl_certificate_content.content | b64decode | trim }}\n{{ _ssl_certificate_key_content.content | b64decode }}"
+    dest: "{{ ssl_certificate_combined_path }}"
+    mode: 0400
+  no_log: True
+  when: "ssl_certificate_combined_path | length > 0"

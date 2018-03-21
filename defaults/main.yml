@@ -1,2 +1,26 @@
 ---
-# defaults file for ansible-role-ssl-certificate
+# defaults file for roles/ssl-certificates
+
+# Server path to SSL certificate
+ssl_certificate_path: /etc/ssl/server.crt
+
+# Server path to SSL certificate key
+ssl_certificate_key_path: /etc/ssl/server.key
+
+# Server path to SSL combined certificate and key, set to empty to disable
+ssl_certificate_combined_path: /etc/ssl/combined.pem
+
+# Text content of the certificate
+ssl_certificate_content: ''
+
+# Text content of the certificate key
+ssl_certificate_key_content: ''
+
+# Create a self-signed certificate if necessary
+ssl_certificate_selfsigned_create: True
+
+# Certificate subject
+ssl_certificate_selfsigned_subject: "/C=UK/ST=Scotland/L=Dundee/O=OME/CN={{ ansible_fqdn }}"
+
+# Certificate validity (days)
+ssl_certificate_selfsigned_days: 365
