@@ -12,7 +12,8 @@ Role Variables
 Defaults: `defaults/main.yml`
 
 Optional variables:
-- `ssl_certificate_path`: Server path to SSL certificate
+- `ssl_certificate_public_path`: Server path to SSL public certificate
+- `ssl_certificate_intermediate_path`: Server path to SSL intermediate certificate(s)
 - `ssl_certificate_key_path`: Server path to SSL certificate key
 - `ssl_certificate_combined_path`: Server path to SSL combined certificate and key (e.g. for Haproxy), set to empty to disable
 - `ssl_certificate_content`: Text content of the certificate, for instance from vault
@@ -40,7 +41,7 @@ Install certificates stored locally on machine running Ansible:
     - hosts: all
       roles:
         - role: ssl-certificate
-          ssl_certificate_content: "{{ lookup('file', '/path/to/server.crt') }}"
+          ssl_certificate_public_content: "{{ lookup('file', '/path/to/server.crt') }}"
           ssl_certificate_key_content: "{{ lookup('file', '/path/to/server.key') }}"
           ssl_certificate_selfsigned_create: False
 

@@ -1,8 +1,14 @@
 ---
 # defaults file for roles/ssl-certificates
 
-# Server path to SSL certificate
-ssl_certificate_path: /etc/ssl/server.crt
+# Server path to SSL public certificate
+ssl_certificate_public_path: /etc/ssl/server.crt
+
+# Server path to SSL intermediate certificate(s)
+ssl_certificate_intermediate_path: /etc/ssl/intermediate.crt
+
+# Server path to SSL bundled public and intermediate certificates
+ssl_certificate_bundled_path: /etc/ssl/bundled.crt
 
 # Server path to SSL certificate key
 ssl_certificate_key_path: /etc/ssl/server.key
@@ -10,8 +16,11 @@ ssl_certificate_key_path: /etc/ssl/server.key
 # Server path to SSL combined certificate and key, set to empty to disable
 ssl_certificate_combined_path: /etc/ssl/combined.pem
 
-# Text content of the certificate
-ssl_certificate_content: ''
+# Text content of the public certificate
+ssl_certificate_public_content: ''
+
+# Text content of the intermediate certificate(s)
+ssl_certificate_intermediate_content: ''
 
 # Text content of the certificate key
 ssl_certificate_key_content: ''
