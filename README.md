@@ -1,6 +1,9 @@
 SSL Certificates
 ================
 
+[![Build Status](https://travis-ci.org/openmicroscopy/ansible-role-ssl-certificate.svg)](https://travis-ci.org/openmicroscopy/ansible-role-ssl-certificate)
+[![Ansible Role](https://img.shields.io/ansible/role/24524.svg)](https://galaxy.ansible.com/openmicroscopy/ssl-certificate/)
+
 Manage SSL certificates for web-servers.
 
 Optionally generate self-signed SSL certificates for internal testing.
