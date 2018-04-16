@@ -12,7 +12,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 def test_intermediate(Command, Sudo, cert):
     with Sudo():
         out = Command.check_output(
-            'openssl crl2pkcs7 -nocrl -certfile /etc/ssl/%s | '
+            'openssl crl2pkcs7 -nocrl -certfile /etc/ssl/localcerts/%s | '
             'openssl pkcs7 -print_certs -text -noout |grep Subject:'
             % cert)
         lines = out.splitlines()
@@ -28,7 +28,7 @@ def test_intermediate(Command, Sudo, cert):
 ])
 def test_combined(Command, Sudo, cert):
     with Sudo():
-        out = Command.check_output('grep BEGIN /etc/ssl/%s' % cert)
+        out = Command.check_output('grep BEGIN /etc/ssl/localcerts/%s' % cert)
     lines = out.splitlines()
     assert lines[0] == '-----BEGIN CERTIFICATE-----'
     assert lines[1] == '-----BEGIN CERTIFICATE-----'

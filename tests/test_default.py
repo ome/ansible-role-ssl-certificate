@@ -7,6 +7,6 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 def test_certificate(Command, Sudo):
     with Sudo():
         out = Command.check_output(
-            'openssl x509 -in /etc/ssl/server.crt -noout -subject')
+            'openssl x509 -in /etc/ssl/localcerts/server.crt -noout -subject')
     assert out.startswith(
         'subject= /C=UK/ST=Scotland/L=Dundee/O=OME/CN=')
