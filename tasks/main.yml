@@ -5,9 +5,8 @@
   fail:
     msg: ssl_certificate_public_content or ssl_certificate_key_content is empty
   when: >-
-    not ssl_certificate_selfsigned_create and
-    ((ssl_certificate_public_content | length == 0) or
-    (ssl_certificate_key_content | length == 0))
+    (not ssl_certificate_selfsigned_create) and
+    (not ssl_certificate_public_content or not ssl_certificate_key_content)
 
 - name: ssl certificate | install openssl
   become: yes
