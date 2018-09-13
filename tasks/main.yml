@@ -9,13 +9,13 @@
     (not ssl_certificate_public_content or not ssl_certificate_key_content)
 
 - name: ssl certificate | install openssl
-  become: yes
+  become: true
   package:
     name: openssl
     state: present
 
 - name: ssl certificate | create certificates directory
-  become: yes
+  become: true
   file:
     path: "{{ item | dirname }}"
     state: directory
@@ -29,7 +29,7 @@
 # Only the key needs to be kept private
 
 - name: ssl certificate | write SSL public certificate
-  become: yes
+  become: true
   copy:
     content: "{{ ssl_certificate_public_content }}"
     dest: "{{ ssl_certificate_public_path }}"
@@ -37,7 +37,7 @@
   when: 'ssl_certificate_public_content | length > 0'
 
 - name: ssl certificate | write SSL intermediate certificate
-  become: yes
+  become: true
   copy:
     content: "{{ ssl_certificate_intermediate_content }}"
     dest: "{{ ssl_certificate_intermediate_path }}"
@@ -45,21 +45,26 @@
   when: 'ssl_certificate_intermediate_content | length > 0'
 
 - name: ssl certificate | write SSL certificate key
-  become: yes
+  become: true
   copy:
     content: "{{ ssl_certificate_key_content }}"
     dest: "{{ ssl_certificate_key_path }}"
     mode: 0400
-  no_log: True
+  no_log: true
   when: 'ssl_certificate_key_content | length > 0'
 
 # Self-signed
 # http://serialized.net/2013/04/simply-generating-self-signed-ssl-certs-with-ansible/
 
 - name: ssl certificate | generate self-signed SSL certificate
-  become: yes
-  command:
-    openssl req -new -nodes -x509 -subj "{{ ssl_certificate_selfsigned_subject }}" -days {{ ssl_certificate_selfsigned_days }} -keyout {{ ssl_certificate_key_path }} -out {{ ssl_certificate_public_path }} -extensions v3_ca
+  become: true
+  command: >
+    openssl req -new -nodes -x509 -subj
+    {{ ssl_certificate_selfsigned_subject }}
+    -days {{ ssl_certificate_selfsigned_days }}
+    -keyout {{ ssl_certificate_key_path }}
+    -out {{ ssl_certificate_public_path }}
+    -extensions v3_ca
   args:
     # Don't overwrite existing certificate
     creates: "{{ ssl_certificate_key_path }}"
@@ -68,20 +73,20 @@
 # Create combined certificate and key
 
 - name: ssl certificate | read public certificate
-  become: yes
+  become: true
   slurp:
     src: "{{ ssl_certificate_public_path }}"
   register: _ssl_certificate_public_content
 
 - name: ssl certificate | read certificate key
-  become: yes
+  become: true
   slurp:
     src: "{{ ssl_certificate_key_path }}"
   register: _ssl_certificate_key_content
-  no_log: True
+  no_log: true
 
 - name: ssl certificate | write bundled certificate
-  become: yes
+  become: true
   copy:
     content: |-
       {{ _ssl_certificate_public_content.content | b64decode | trim }}
@@ -91,7 +96,7 @@
   when: "ssl_certificate_bundled_path | length > 0"
 
 - name: ssl certificate | write SSL combined certificate key
-  become: yes
+  become: true
   copy:
     content: |-
       {{ _ssl_certificate_public_content.content | b64decode | trim  }}
@@ -99,5 +104,5 @@
       {{ _ssl_certificate_key_content.content | b64decode | trim }}
     dest: "{{ ssl_certificate_combined_path }}"
     mode: 0400
-  no_log: True
+  no_log: true
   when: "ssl_certificate_combined_path | length > 0"

@@ -6,12 +6,21 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: instance
+  - name: ssl-certificate-c7
     image: centos:7
+  - name: ssl-certificate-u1604
+    image: ubuntu:16.04
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
+ansible:
+  diff: true
+  verbose: true
+  host_vars:
+    ssl-certificate-u1604:
+      ssl_certificate_intermediate_content: >
+        {{ lookup('file', 'tests/intermediate.pem') }}
 scenario:
   name: default
 verifier:

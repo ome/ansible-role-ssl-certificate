@@ -26,10 +26,11 @@ ssl_certificate_intermediate_content: ''
 ssl_certificate_key_content: ''
 
 # Create a self-signed certificate if necessary
-ssl_certificate_selfsigned_create: True
+ssl_certificate_selfsigned_create: true
 
 # Certificate subject
-ssl_certificate_selfsigned_subject: "/C=UK/ST=Scotland/L=Dundee/O=OME/CN={{ ansible_fqdn }}"
+ssl_certificate_selfsigned_subject: |-
+  /C=UK/ST=Scotland/L=Dundee/O=OME/CN={{ ansible_fqdn }}
 
 # Certificate validity (days)
 ssl_certificate_selfsigned_days: 365
