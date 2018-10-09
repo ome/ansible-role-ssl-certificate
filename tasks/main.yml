@@ -85,7 +85,7 @@
   copy:
     content: |-
       {{ _ssl_certificate_public_content.content | b64decode | trim }}
-      {{ ssl_certificate_intermediate_content | trim }}
+      {{ ssl_certificate_intermediate_content }}
     dest: "{{ ssl_certificate_bundled_path }}"
     mode: 0444
   when: "ssl_certificate_bundled_path | length > 0"
@@ -96,7 +96,7 @@
     content: |-
       {{ _ssl_certificate_public_content.content | b64decode | trim  }}
       {{ ssl_certificate_intermediate_content | trim }}
-      {{ _ssl_certificate_key_content.content | b64decode | trim }}
+      {{ _ssl_certificate_key_content.content | b64decode }}
     dest: "{{ ssl_certificate_combined_path }}"
     mode: 0400
   no_log: True
