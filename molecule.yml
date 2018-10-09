@@ -22,4 +22,4 @@ ansible:
   verbose: True
   host_vars:
     ssl-certificate-u1604:
-      ssl_certificate_intermediate_content: "{{ lookup('file', 'tests/intermediate.pem') }}"
+      ssl_certificate_intermediate_content: "{{ lookup('file', 'tests/intermediate.pem') + '\n' }}"
