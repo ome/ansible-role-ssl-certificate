@@ -49,6 +49,8 @@ Install certificates stored locally on machine running Ansible:
           ssl_certificate_selfsigned_create: False
 
 
+Note: the additional newline being added after the lookup content is to correct Ansible bug https://github.com/ansible/ansible/issues/30829.
+
 Author Information
 ------------------
 
