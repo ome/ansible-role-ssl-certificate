@@ -44,10 +44,12 @@ Install certificates stored locally on machine running Ansible:
     - hosts: all
       roles:
         - role: ssl-certificate
-          ssl_certificate_public_content: "{{ lookup('file', '/path/to/server.crt') }}"
-          ssl_certificate_key_content: "{{ lookup('file', '/path/to/server.key') }}"
+          ssl_certificate_public_content: "{{ lookup('file', '/path/to/server.crt') + '\n' }}"
+          ssl_certificate_key_content: "{{ lookup('file', '/path/to/server.key') + '\n' }}"
           ssl_certificate_selfsigned_create: False
 
+
+Note: the additional newline being added after the lookup content is to correct Ansible bug https://github.com/ansible/ansible/issues/30829.
 
 Author Information
 ------------------
