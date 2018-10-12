@@ -18,7 +18,7 @@ provisioner:
     host_vars:
       ssl-certificate-u1604:
         ssl_certificate_intermediate_content: >
-          {{ lookup('file', 'intermediate.pem') }}
+          {{ lookup('file', 'intermediate.pem') + "\n" }}
 scenario:
   name: default
 verifier:
