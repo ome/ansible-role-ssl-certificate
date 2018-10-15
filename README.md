@@ -26,18 +26,27 @@ Optional variables:
 - `ssl_certificate_selfsigned_days`: Self-signed certificate validity (days)
 
 
-Note this role does not configure or restart any webserver for SSL.
-This should be handled elsewhere.
+Listeners/Handlers
+------------------
+
+This role notifies a listener `ssl certificate changed` when any changes are made.
+This should be used to trigger a restart of any services dependent on the certificates.
 
 
 Example Playbooks
 -----------------
 
-Create a self-signed certificate with defaults:
+Create a self-signed certificate with defaults and restart Nginx (assumed to be already installed and configured):
 
     - hosts: all
       roles:
         - role: ssl-certificate
+      handlers:
+        - name: restart nginx
+          listen: ssl certificate changed
+          service:
+            name: nginx
+            state: restarted
 
 Install certificates stored locally on machine running Ansible:
 

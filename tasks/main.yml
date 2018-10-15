@@ -35,6 +35,7 @@
     dest: "{{ ssl_certificate_public_path }}"
     mode: 0444
   when: 'ssl_certificate_public_content | length > 0'
+  notify: ssl certificate changed
 
 - name: ssl certificate | write SSL intermediate certificate
   become: yes
@@ -43,6 +44,7 @@
     dest: "{{ ssl_certificate_intermediate_path }}"
     mode: 0444
   when: 'ssl_certificate_intermediate_content | length > 0'
+  notify: ssl certificate changed
 
 - name: ssl certificate | write SSL certificate key
   become: yes
@@ -52,6 +54,7 @@
     mode: 0400
   no_log: True
   when: 'ssl_certificate_key_content | length > 0'
+  notify: ssl certificate changed
 
 # Self-signed
 # http://serialized.net/2013/04/simply-generating-self-signed-ssl-certs-with-ansible/
@@ -64,6 +67,7 @@
     # Don't overwrite existing certificate
     creates: "{{ ssl_certificate_key_path }}"
   when: ssl_certificate_selfsigned_create
+  notify: ssl certificate changed
 
 # Create combined certificate and key
 
@@ -89,6 +93,7 @@
     dest: "{{ ssl_certificate_bundled_path }}"
     mode: 0444
   when: "ssl_certificate_bundled_path | length > 0"
+  notify: ssl certificate changed
 
 - name: ssl certificate | write SSL combined certificate key
   become: yes
@@ -101,3 +106,4 @@
     mode: 0400
   no_log: True
   when: "ssl_certificate_combined_path | length > 0"
+  notify: ssl certificate changed
