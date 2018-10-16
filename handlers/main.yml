@@ -1,0 +1,7 @@
+---
+# Handlers for ssl-certificate
+
+# Ensures there is always at least one listener to prevent Ansible errors
+- name: ssl certificate changed
+  debug:
+    msg: ssl certificate changed
