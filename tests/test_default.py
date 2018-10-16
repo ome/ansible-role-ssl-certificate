@@ -10,3 +10,7 @@ def test_certificate(Command, Sudo):
             'openssl x509 -in /etc/ssl/localcerts/server.crt -noout -subject')
     assert out.startswith(
         'subject= /C=UK/ST=Scotland/L=Dundee/O=OME/CN=')
+
+
+def test_listener_trigger(File):
+    assert File('/tmp/ssl-certificate-changed').exists
