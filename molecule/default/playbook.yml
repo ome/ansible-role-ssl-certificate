@@ -7,7 +7,7 @@
   handlers:
     - name: Create file when ssl certificate changed
       listen: ssl certificate changed
-      # Use command so that we get an error if the handler is triggered during
+      # Use file so that we get an error if the handler is triggered during
       # the idempotence check
       file:
         path: /tmp/ssl-certificate-changed
