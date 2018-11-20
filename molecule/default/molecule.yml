@@ -1,0 +1,27 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: ssl-certificate-c7
+    image: centos:7
+  - name: ssl-certificate-u1604
+    image: ubuntu:16.04
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  inventory:
+    host_vars:
+      ssl-certificate-u1604:
+        ssl_certificate_intermediate_content: |
+            {{ lookup('file', 'intermediate.pem') }}
+scenario:
+  name: default
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

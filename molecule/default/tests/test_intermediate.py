@@ -1,17 +1,19 @@
+import os
+
 import testinfra.utils.ansible_runner
 import pytest
 
 testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
-    '.molecule/ansible_inventory').get_hosts('ssl-certificate-u1604')
+    os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('ssl-certificate-u1604')
 
 
 @pytest.mark.parametrize("cert", [
     'bundled.crt',
     'combined.pem',
 ])
-def test_intermediate(Command, Sudo, cert):
-    with Sudo():
-        out = Command.check_output(
+def test_intermediate(host, cert):
+    with host.sudo():
+        out = host.check_output(
             'openssl crl2pkcs7 -nocrl -certfile /etc/ssl/localcerts/%s | '
             'openssl pkcs7 -print_certs -text -noout |grep Subject:'
             % cert)
@@ -26,9 +28,9 @@ def test_intermediate(Command, Sudo, cert):
     'bundled.crt',
     'combined.pem',
 ])
-def test_combined(Command, Sudo, cert):
-    with Sudo():
-        out = Command.check_output('grep BEGIN /etc/ssl/localcerts/%s' % cert)
+def test_combined(host, cert):
+    with host.sudo():
+        out = host.check_output('grep BEGIN /etc/ssl/localcerts/%s' % cert)
     lines = out.splitlines()
     assert lines[0] == '-----BEGIN CERTIFICATE-----'
     assert lines[1] == '-----BEGIN CERTIFICATE-----'
