@@ -15,11 +15,14 @@ Role Variables
 Defaults: `defaults/main.yml`
 
 Optional variables:
+
 - `ssl_certificate_public_path`: Server path to SSL public certificate
 - `ssl_certificate_intermediate_path`: Server path to SSL intermediate certificate(s)
+- `ssl_certificate_bundled_path`: Server path to SSL bundled public and intermediate certificates (e.g. for Nginx)
 - `ssl_certificate_key_path`: Server path to SSL certificate key
 - `ssl_certificate_combined_path`: Server path to SSL combined certificate and key (e.g. for Haproxy), set to empty to disable
-- `ssl_certificate_content`: Text content of the certificate, for instance from vault
+- `ssl_certificate_public_content`: Text content of the certificate, for instance from vault
+- `ssl_certificate_intermediate_content`: Text content of the intermediate certificate(s)
 - `ssl_certificate_key_content`: Text content of the certificate key
 - `ssl_certificate_selfsigned_create`: Create a self-signed certificate if necessary, default `True`
 - `ssl_certificate_selfsigned_subject`: Self-signed certificate subject
