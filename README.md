@@ -2,7 +2,7 @@ SSL Certificates
 ================
 
 [![Build Status](https://travis-ci.org/ome/ansible-role-ssl-certificate.svg)](https://travis-ci.org/ome/ansible-role-ssl-certificate)
-[![Ansible Role](https://img.shields.io/ansible/role/24524.svg)](https://galaxy.ansible.com/ome/ssl-certificate/)
+[![Ansible Role](https://img.shields.io/ansible/role/41366.svg)](https://galaxy.ansible.com/ome/ssl-certificate/)
 
 Manage SSL certificates for web-servers.
 
