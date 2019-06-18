@@ -1,8 +1,8 @@
 SSL Certificates
 ================
 
-[![Build Status](https://travis-ci.org/openmicroscopy/ansible-role-ssl-certificate.svg)](https://travis-ci.org/openmicroscopy/ansible-role-ssl-certificate)
-[![Ansible Role](https://img.shields.io/ansible/role/24524.svg)](https://galaxy.ansible.com/openmicroscopy/ssl-certificate/)
+[![Build Status](https://travis-ci.org/ome/ansible-role-ssl-certificate.svg)](https://travis-ci.org/ome/ansible-role-ssl-certificate)
+[![Ansible Role](https://img.shields.io/ansible/role/24524.svg)](https://galaxy.ansible.com/ome/ssl-certificate/)
 
 Manage SSL certificates for web-servers.
 
@@ -43,7 +43,7 @@ Create a self-signed certificate with defaults and restart Nginx (assumed to be 
 
     - hosts: all
       roles:
-        - role: ssl-certificate
+        - role: ome.ssl_certificate
       handlers:
         - name: restart nginx
           listen: ssl certificate changed

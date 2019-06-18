@@ -12,6 +12,7 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - xenial
+  role_name: ssl_certificate
   galaxy_tags: []
 
 dependencies: []
