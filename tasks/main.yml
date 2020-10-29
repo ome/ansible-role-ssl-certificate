@@ -9,11 +9,13 @@
     (not ssl_certificate_public_content or not ssl_certificate_key_content)
 
 - name: install openssl
+  become: true
   package:
     name: openssl
     state: present
 
 - name: create certificates directory
+  become: true
   file:
     path: "{{ item | dirname }}"
     state: directory
@@ -27,6 +29,7 @@
 # Only the key needs to be kept private
 
 - name: write SSL public certificate
+  become: true
   copy:
     content: "{{ ssl_certificate_public_content }}"
     dest: "{{ ssl_certificate_public_path }}"
@@ -35,6 +38,7 @@
   notify: ssl certificate changed
 
 - name: write SSL intermediate certificate
+  become: true
   copy:
     content: "{{ ssl_certificate_intermediate_content }}"
     dest: "{{ ssl_certificate_intermediate_path }}"
@@ -43,6 +47,7 @@
   notify: ssl certificate changed
 
 - name: write SSL certificate key
+  become: true
   copy:
     content: "{{ ssl_certificate_key_content }}"
     dest: "{{ ssl_certificate_key_path }}"
@@ -55,6 +60,7 @@
 # http://serialized.net/2013/04/simply-generating-self-signed-ssl-certs-with-ansible/
 
 - name: generate self-signed SSL certificate
+  become: true
   command: >
     openssl req -new -nodes -x509 -subj
     {{ ssl_certificate_selfsigned_subject }}
@@ -71,17 +77,20 @@
 # Create combined certificate and key
 
 - name: read public certificate
+  become: true
   slurp:
     src: "{{ ssl_certificate_public_path }}"
   register: _ssl_certificate_public_content
 
 - name: read certificate key
+  become: true
   slurp:
     src: "{{ ssl_certificate_key_path }}"
   register: _ssl_certificate_key_content
   no_log: true
 
 - name: write bundled certificate
+  become: true
   copy:
     content: |-
       {{ _ssl_certificate_public_content.content | b64decode | trim }}
@@ -92,6 +101,7 @@
   notify: ssl certificate changed
 
 - name: write SSL combined certificate key
+  become: true
   copy:
     content: |-
       {{ _ssl_certificate_public_content.content | b64decode | trim  }}
