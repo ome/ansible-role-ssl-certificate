@@ -1,21 +1,19 @@
 ---
 # tasks file for roles/ssl-certificate
 
-- name: ssl certificate | check parameters
+- name: check parameters
   fail:
     msg: ssl_certificate_public_content or ssl_certificate_key_content is empty
   when: >-
     (not ssl_certificate_selfsigned_create) and
     (not ssl_certificate_public_content or not ssl_certificate_key_content)
 
-- name: ssl certificate | install openssl
-  become: true
+- name: install openssl
   package:
     name: openssl
     state: present
 
-- name: ssl certificate | create certificates directory
-  become: true
+- name: create certificates directory
   file:
     path: "{{ item | dirname }}"
     state: directory
@@ -28,8 +26,7 @@
 # Create from content of variable e.g. from vault
 # Only the key needs to be kept private
 
-- name: ssl certificate | write SSL public certificate
-  become: true
+- name: write SSL public certificate
   copy:
     content: "{{ ssl_certificate_public_content }}"
     dest: "{{ ssl_certificate_public_path }}"
@@ -37,8 +34,7 @@
   when: 'ssl_certificate_public_content | length > 0'
   notify: ssl certificate changed
 
-- name: ssl certificate | write SSL intermediate certificate
-  become: true
+- name: write SSL intermediate certificate
   copy:
     content: "{{ ssl_certificate_intermediate_content }}"
     dest: "{{ ssl_certificate_intermediate_path }}"
@@ -46,8 +42,7 @@
   when: 'ssl_certificate_intermediate_content | length > 0'
   notify: ssl certificate changed
 
-- name: ssl certificate | write SSL certificate key
-  become: true
+- name: write SSL certificate key
   copy:
     content: "{{ ssl_certificate_key_content }}"
     dest: "{{ ssl_certificate_key_path }}"
@@ -59,8 +54,7 @@
 # Self-signed
 # http://serialized.net/2013/04/simply-generating-self-signed-ssl-certs-with-ansible/
 
-- name: ssl certificate | generate self-signed SSL certificate
-  become: true
+- name: generate self-signed SSL certificate
   command: >
     openssl req -new -nodes -x509 -subj
     {{ ssl_certificate_selfsigned_subject }}
@@ -76,21 +70,18 @@
 
 # Create combined certificate and key
 
-- name: ssl certificate | read public certificate
-  become: true
+- name: read public certificate
   slurp:
     src: "{{ ssl_certificate_public_path }}"
   register: _ssl_certificate_public_content
 
-- name: ssl certificate | read certificate key
-  become: true
+- name: read certificate key
   slurp:
     src: "{{ ssl_certificate_key_path }}"
   register: _ssl_certificate_key_content
   no_log: true
 
-- name: ssl certificate | write bundled certificate
-  become: true
+- name: write bundled certificate
   copy:
     content: |-
       {{ _ssl_certificate_public_content.content | b64decode | trim }}
@@ -100,8 +91,7 @@
   when: "ssl_certificate_bundled_path | length > 0"
   notify: ssl certificate changed
 
-- name: ssl certificate | write SSL combined certificate key
-  become: true
+- name: write SSL combined certificate key
   copy:
     content: |-
       {{ _ssl_certificate_public_content.content | b64decode | trim  }}
