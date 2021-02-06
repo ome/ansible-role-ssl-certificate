@@ -12,3 +12,4 @@
       file:
         path: /tmp/ssl-certificate-changed
         state: touch
+        mode: 0644

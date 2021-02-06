@@ -19,6 +19,7 @@
   file:
     path: "{{ item | dirname }}"
     state: directory
+    mode: 0755
   with_items:
     - "{{ ssl_certificate_public_path }}"
     - "{{ ssl_certificate_intermediate_path }}"
