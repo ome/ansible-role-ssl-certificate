@@ -27,7 +27,7 @@ Optional variables:
 - `ssl_certificate_selfsigned_create`: Create a self-signed certificate if necessary, default `True`
 - `ssl_certificate_selfsigned_subject`: Self-signed certificate subject
 - `ssl_certificate_selfsigned_days`: Self-signed certificate validity (days)
-
+- `ssl_certificate_install_openssl`: Install OpenSSL, default `True`
 
 Listeners/Handlers
 ------------------

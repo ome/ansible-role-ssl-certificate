@@ -34,3 +34,6 @@ ssl_certificate_selfsigned_subject: |-
 
 # Certificate validity (days)
 ssl_certificate_selfsigned_days: 365
+
+# Whether or not to install OpenSSL
+ssl_certificate_install_openssl: true
