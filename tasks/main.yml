@@ -13,6 +13,7 @@
   package:
     name: openssl
     state: present
+  when: ssl_certificate_install_openssl
 
 - name: create certificates directory
   become: true
