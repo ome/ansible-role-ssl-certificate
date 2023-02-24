@@ -14,7 +14,7 @@ jobs:
     outputs:
       matrix: ${{ steps.listscenarios.outputs.scenarios }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - id: listscenarios
         uses: ome/action-ansible-molecule-list-scenarios@main
 
@@ -29,10 +29,16 @@ jobs:
       matrix:
         scenario: ${{fromJson(needs.list-scenarios.outputs.matrix)}}
     steps:
-      - uses: actions/checkout@v2
-      - uses: ome/action-ome-ansible-molecule@main
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
-          scenario: ${{ matrix.scenario }}
+          python-version: '3.8'
+      - name: Install Ansible & Molecule
+        run: |
+            pip install wheel "ome-ansible-molecule==0.7.0a1"
+            pip install -U molecule molecule-plugins[docker]
+      - name: Run molecule
+        run: molecule test -s "${{ matrix.scenario }}"
 
   publish:
     name: Galaxy
