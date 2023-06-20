@@ -2,7 +2,7 @@
 - name: Converge
   hosts: all
   roles:
-    - role: ansible-role-ssl-certificate
+    - role: ome.ssl_certificate
 
   handlers:
     - name: Create file when ssl certificate changed

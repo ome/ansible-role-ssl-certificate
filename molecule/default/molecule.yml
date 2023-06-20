@@ -3,8 +3,10 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+    yamllint .
+    ansible-lint
+    flake8
 platforms:
   - name: ssl-certificate-c7
     image: centos:7
@@ -19,9 +21,5 @@ provisioner:
       ssl-certificate-u1604:
         ssl_certificate_intermediate_content: |
             {{ lookup('file', 'intermediate.pem') }}
-scenario:
-  name: default
 verifier:
   name: testinfra
-  lint:
-    name: flake8
