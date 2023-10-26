@@ -2,7 +2,7 @@ SSL Certificates
 ================
 
 [![Actions Status](https://github.com/ome/ansible-role-ssl-certificate/workflows/Molecule/badge.svg)](https://github.com/ome/ansible-role-ssl-certificate/actions)
-[![Ansible Role](https://img.shields.io/ansible/role/41366.svg)](https://galaxy.ansible.com/ome/ssl_certificate/)
+[![Ansible Role](https://img.shields.io/badge/ansible--galaxy-ssl_certificate-blue.svg)](https://galaxy.ansible.com/ui/standalone/roles/ome/ssl_certificate/)
 
 Manage SSL certificates for web-servers.
 
