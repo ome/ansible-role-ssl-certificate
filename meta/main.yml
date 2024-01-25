@@ -4,14 +4,14 @@ galaxy_info:
   description: Manage SSL certificates for web-servers
   company: Open Microscopy Environment
   license: BSD
-  min_ansible_version: 2.3
+  min_ansible_version: 2.10
   platforms:
     - name: EL
       versions:
-        - 7
+        - 9
     - name: Ubuntu
       versions:
-        - xenial
+        - jammy
   role_name: ssl_certificate
   namespace: ome
   galaxy_tags: []
