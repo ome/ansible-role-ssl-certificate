@@ -2,7 +2,7 @@
 # tasks file for roles/ssl-certificate
 
 - name: check parameters
-  fail:
+  ansible.builtin.fail:
     msg: ssl_certificate_public_content or ssl_certificate_key_content is empty
   when: >-
     (not ssl_certificate_selfsigned_create) and
