@@ -2,7 +2,7 @@
 # tasks file for roles/ssl-certificate
 
 - name: check parameters
-  fail:
+  ansible.builtin.fail:
     msg: ssl_certificate_public_content or ssl_certificate_key_content is empty
   when: >-
     (not ssl_certificate_selfsigned_create) and
@@ -10,14 +10,14 @@
 
 - name: install openssl
   become: true
-  package:
+  ansible.builtin.package:
     name: openssl
     state: present
   when: ssl_certificate_install_openssl
 
 - name: create certificates directory
   become: true
-  file:
+  ansible.builtin.file:
     path: "{{ item | dirname }}"
     state: directory
     mode: 0755
@@ -32,7 +32,7 @@
 
 - name: write SSL public certificate
   become: true
-  copy:
+  ansible.builtin.copy:
     content: "{{ ssl_certificate_public_content }}"
     dest: "{{ ssl_certificate_public_path }}"
     mode: 0444
@@ -41,7 +41,7 @@
 
 - name: write SSL intermediate certificate
   become: true
-  copy:
+  ansible.builtin.copy:
     content: "{{ ssl_certificate_intermediate_content }}"
     dest: "{{ ssl_certificate_intermediate_path }}"
     mode: 0444
@@ -50,7 +50,7 @@
 
 - name: write SSL certificate key
   become: true
-  copy:
+  ansible.builtin.copy:
     content: "{{ ssl_certificate_key_content }}"
     dest: "{{ ssl_certificate_key_path }}"
     mode: 0400
@@ -63,7 +63,7 @@
 
 - name: generate self-signed SSL certificate
   become: true
-  command: >
+  ansible.builtin.command: >
     openssl req -new -nodes -x509 -subj
     {{ ssl_certificate_selfsigned_subject }}
     -days {{ ssl_certificate_selfsigned_days }}
@@ -80,20 +80,20 @@
 
 - name: read public certificate
   become: true
-  slurp:
+  ansible.builtin.slurp:
     src: "{{ ssl_certificate_public_path }}"
   register: _ssl_certificate_public_content
 
 - name: read certificate key
   become: true
-  slurp:
+  ansible.builtin.slurp:
     src: "{{ ssl_certificate_key_path }}"
   register: _ssl_certificate_key_content
   no_log: true
 
 - name: write bundled certificate
   become: true
-  copy:
+  ansible.builtin.copy:
     content: |-
       {{ _ssl_certificate_public_content.content | b64decode | trim }}
       {{ ssl_certificate_intermediate_content }}
@@ -104,7 +104,7 @@
 
 - name: write SSL combined certificate key
   become: true
-  copy:
+  ansible.builtin.copy:
     content: |-
       {{ _ssl_certificate_public_content.content | b64decode | trim }}
       {{ ssl_certificate_intermediate_content | trim }}
